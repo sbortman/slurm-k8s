@@ -27,5 +27,5 @@ data:
     SelectType=select/cons_res
     SelectTypeParameters=CR_Core
 
-    NodeName=c1 CPUs=2 State=UNKNOWN
-    PartitionName=debug Nodes=c1 Default=YES MaxTime=INFINITE State=UP
+    NodeName=slurm-c1 CPUs=2 State=UNKNOWN
+    PartitionName=debug Nodes=slurm-c1 Default=YES MaxTime=INFINITE State=UP
