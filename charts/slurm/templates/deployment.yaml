@@ -97,8 +97,7 @@ spec:
           command: ["/entrypoint.sh", "slurmdbd"]
           volumeMounts:
             - name: slurmdbd-config
-              mountPath: /etc/slurm/slurmdbd.conf
-              subPath: slurmdbd.conf
+              mountPath: /etc/slurm
               readOnly: true
             - name: munge-key
               mountPath: /etc/munge/munge.key
