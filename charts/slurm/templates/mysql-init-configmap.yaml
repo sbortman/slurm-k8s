@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init-script
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS slurm_acct_db;
+    CREATE USER IF NOT EXISTS 'slurm'@'%' IDENTIFIED BY 'slurmpass';
+    GRANT ALL PRIVILEGES ON slurm_acct_db.* TO 'slurm'@'%';
+    FLUSH PRIVILEGES;
