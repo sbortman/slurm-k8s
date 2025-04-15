@@ -1,0 +1,21 @@
+# slurm/templates/slurm-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: slurm-config
+data:
+  slurm.conf: |
+    ClusterName=docker-cluster
+    ControlMachine=slurmctld
+    SlurmUser=slurm
+    SlurmdSpoolDir=/var/spool/slurmd
+    SlurmctldLogFile=/var/log/slurm/slurmctld.log
+    SlurmdLogFile=/var/log/slurm/slurmd.log
+    StateSaveLocation=/var/spool/slurm/state
+    AuthType=auth/munge
+    CryptoType=crypto/munge
+    SchedulerType=sched/backfill
+    SelectType=select/cons_res
+    SelectTypeParameters=CR_Core
+    NodeName=localhost CPUs=2 State=UNKNOWN
+    PartitionName=debug Nodes=localhost Default=YES MaxTime=INFINITE State=UP

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slurmctld
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slurmctld
+  template:
+    metadata:
+      labels:
+        app: slurmctld
+    spec:
+      containers:
+        - name: slurmctld
+          image: slurm-docker-slurmctld:latest
+          imagePullPolicy: Never
+          command: ["/entrypoint.sh", "slurmctld"]
+          ports:
+            - containerPort: 6817
+          volumeMounts:
+            - name: munge
+              mountPath: /etc/munge
+              readOnly: true
+            - name: slurm-config
+              mountPath: /etc/slurm/slurm.conf
+              subPath: slurm.conf
+      volumes:
+        - name: munge
+          secret:
+            secretName: munge-key
+        - name: slurm-config
+          configMap:
+            name: slurm-config

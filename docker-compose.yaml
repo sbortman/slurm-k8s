@@ -1,0 +1,125 @@
+version: '3.9'
+
+services:
+  mariadb:
+    image: mariadb:10.5
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: slurm_acct_db
+      MYSQL_USER: slurm
+      MYSQL_PASSWORD: slurmdbpass
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - slurmnet
+
+  slurmdbd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slurmdbd
+    hostname: slurmdbd
+    depends_on:
+      - mariadb
+    volumes:
+      - ./conf/slurmdbd.conf:/etc/slurm/slurmdbd.conf:ro
+      - slurmdbd-run:/var/run/slurm
+      - slurmdbd-logs:/var/log/slurm
+      - slurm-munge-key:/etc/munge
+    entrypoint: ["/entrypoint.sh", "slurmdbd"]
+    networks:
+      - slurmnet
+
+  slurmctld:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slurmctld
+    hostname: slurmctld
+    depends_on:
+      - slurmdbd
+    volumes:
+      - ./conf/slurm.conf:/etc/slurm/slurm.conf:ro
+      - slurmctld-run:/var/run/slurm
+      - slurmctld-logs:/var/log/slurm
+      - slurmctld-state:/var/spool/slurm/state
+      - slurm-munge-key:/etc/munge
+    entrypoint: ["/entrypoint.sh", "slurmctld"]
+    networks:
+      - slurmnet
+
+  c1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: c1
+    hostname: c1
+    depends_on:
+      - slurmctld
+    volumes:
+      - ./conf/slurm.conf:/etc/slurm/slurm.conf:ro
+      - c1-run:/var/run/slurm
+      - c1-logs:/var/log/slurm
+      - c1-spool:/var/spool/slurmd
+      - slurm-munge-key:/etc/munge
+    entrypoint: ["/entrypoint.sh", "slurmd"]
+    networks:
+      - slurmnet
+  c2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: c2
+    hostname: c2
+    depends_on:
+      - slurmctld
+    volumes:
+      - ./conf/slurm.conf:/etc/slurm/slurm.conf:ro
+      - c2-run:/var/run/slurm
+      - c2-logs:/var/log/slurm
+      - c2-spool:/var/spool/slurmd
+      - slurm-munge-key:/etc/munge
+    entrypoint: ["/entrypoint.sh", "slurmd"]
+    networks:
+      - slurmnet
+  c3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: c3
+    hostname: c3
+    depends_on:
+      - slurmctld
+    volumes:
+      - ./conf/slurm.conf:/etc/slurm/slurm.conf:ro
+      - c3-run:/var/run/slurm
+      - c3-logs:/var/log/slurm
+      - c3-spool:/var/spool/slurmd
+      - slurm-munge-key:/etc/munge
+    entrypoint: ["/entrypoint.sh", "slurmd"]
+    networks:
+      - slurmnet
+
+
+volumes:
+  mariadb:
+  slurmdbd-run:
+  slurmdbd-logs:
+  slurmctld-run:
+  slurmctld-logs:
+  slurmctld-state:
+  c1-run:
+  c1-logs:
+  c1-spool:
+  c2-run:
+  c2-logs:
+  c2-spool:
+  c3-run:
+  c3-logs:
+  c3-spool:
+  slurm-munge-key:
+
+networks:
+  slurmnet:
+    driver: bridge
