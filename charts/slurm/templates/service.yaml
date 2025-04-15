@@ -4,10 +4,10 @@ metadata:
   name: slurmctld
 spec:
   selector:
-    app: slurmctld
+    app: {{ include "slurm.name" . }}
+    role: controller
   ports:
-    - protocol: TCP
-      port: 6817
+    - port: 6817
       targetPort: 6817
 ---
 apiVersion: v1
