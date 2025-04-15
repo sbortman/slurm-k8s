@@ -1,0 +1,20 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: slurm-k8s
+build:
+  artifacts:
+    - image: slurmctld
+      context: .
+      docker:
+        dockerfile: Dockerfile
+  local:
+    push: false
+manifests:
+  helm:
+    releases:
+      - name: slurm
+        chartPath: charts/slurm
+        setValues:
+          image.repository: slurmctld
+          image.tag: latest

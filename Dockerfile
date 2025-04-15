@@ -13,6 +13,8 @@ RUN chmod 600 /etc/slurm/slurmdbd.conf && \
     mkdir -p /etc/munge && \
     dd if=/dev/urandom bs=1 count=1024 2>/dev/null | base64 > /etc/munge/munge.key && \
     chmod 400 /etc/munge/munge.key && \
-    chown -R munge:munge /etc/munge
+    chown -R munge:munge /etc/munge && \
+    mkdir -p /var/log/munge && chown munge:munge /var/log/munge
+
 
 ENTRYPOINT ["/entrypoint.sh"]

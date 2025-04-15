@@ -12,6 +12,7 @@ spec:
       labels:
         app: {{ include "slurm.name" . }}
     spec:
+      hostname: slurmctld
       containers:
         - name: slurmctld
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}

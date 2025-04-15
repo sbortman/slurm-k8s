@@ -12,6 +12,7 @@ data:
     ClusterName=docker-cluster
     ControlMachine=slurmctld
     ProctrackType=proctrack/linuxproc
+    MailProg=/bin/true
 
     SlurmUser=slurm
     SlurmdSpoolDir=/var/spool/slurmd
