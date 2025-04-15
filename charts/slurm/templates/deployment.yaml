@@ -152,8 +152,7 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/init.sql
               subPath: init.sql
             - name: mysql-custom-config
-              mountPath: /etc/mysql/conf.d/my.cnf
-              subPath: my.cnf
+              mountPath: /etc/mysql/conf.d
 
       volumes:
         - name: mysql-storage
@@ -163,5 +162,4 @@ spec:
             name: mysql-init-script
         - name: mysql-custom-config
           configMap:
-            name: mysql-custom-config            
-
+            name: mysql-custom-config
