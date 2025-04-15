@@ -1,49 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "slurm.fullname" . }}-ctld
-  labels:
-    app: {{ include "slurm.name" . }}
-    component: slurmctld
+  name: {{ include "slurm.fullname" . }}
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: {{ include "slurm.name" . }}
-      component: slurmctld
   template:
     metadata:
       labels:
         app: {{ include "slurm.name" . }}
-        component: slurmctld
     spec:
       containers:
         - name: slurmctld
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           command: ["/entrypoint.sh", "slurmctld"]
           volumeMounts:
             - name: slurm-config
               mountPath: /etc/slurm/slurm.conf
               subPath: slurm.conf
               readOnly: true
-            - name: run
-              mountPath: /var/run/slurm
-            - name: logs
-              mountPath: /var/log/slurm
-            - name: state
-              mountPath: /var/spool/slurm/state
             - name: munge-key
-              mountPath: /etc/munge
+              mountPath: /etc/munge/munge.key
+              subPath: munge.key
+              readOnly: true
       volumes:
         - name: slurm-config
           configMap:
-            name: {{ include "slurm.fullname" . }}-config
-        - name: run
-          emptyDir: {}
-        - name: logs
-          emptyDir: {}
-        - name: state
-          emptyDir: {}
+            name: slurm-config
         - name: munge-key
           secret:
             secretName: slurm-munge-key
