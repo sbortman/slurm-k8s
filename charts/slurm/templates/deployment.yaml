@@ -39,7 +39,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "slurm.fullname" . }}-c1
+  name: c1
 spec:
   replicas: 1
   selector:
@@ -56,7 +56,7 @@ spec:
       containers:
         - name: slurmd
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          command: ["/entrypoint.sh", "slurmd"]
+          command: ["/entrypoint.sh", "slurmd", "-N", "c1"]
           volumeMounts:
             - name: slurm-config
               mountPath: /etc/slurm/slurm.conf

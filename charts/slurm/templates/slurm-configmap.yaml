@@ -1,18 +1,12 @@
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: slurm-config
-  labels:
-    app: slurm
-    component: config
-
 data:
   slurm.conf: |
     ClusterName=docker-cluster
     ControlMachine=slurmctld
     ProctrackType=proctrack/linuxproc
-    MailProg=/bin/true
 
     SlurmUser=slurm
     SlurmdSpoolDir=/var/spool/slurmd
@@ -27,5 +21,5 @@ data:
     SelectType=select/cons_res
     SelectTypeParameters=CR_Core
 
-    NodeName=slurm-c1 CPUs=2 State=UNKNOWN
-    PartitionName=debug Nodes=slurm-c1 Default=YES MaxTime=INFINITE State=UP
+    NodeName=c1 CPUs=2 State=UNKNOWN
+    PartitionName=debug Nodes=c1 Default=YES MaxTime=INFINITE State=UP
