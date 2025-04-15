@@ -151,18 +151,17 @@ spec:
             - name: init-script
               mountPath: /docker-entrypoint-initdb.d/init.sql
               subPath: init.sql
+            - name: mysql-custom-config
+              mountPath: /etc/mysql/conf.d/my.cnf
+              subPath: my.cnf
+
       volumes:
         - name: mysql-storage
           emptyDir: {}
         - name: init-script
           configMap:
             name: mysql-init-script
+        - name: mysql-custom-config
+          configMap:
+            name: mysql-custom-config            
 
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mysql-secret
-stringData:
-  root-password: rootpass
-  user-password: slurmpass

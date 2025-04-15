@@ -8,3 +8,6 @@ data:
     CREATE USER IF NOT EXISTS 'slurm'@'%' IDENTIFIED BY 'slurmpass';
     GRANT ALL PRIVILEGES ON slurm_acct_db.* TO 'slurm'@'%';
     FLUSH PRIVILEGES;
+  my.cnf: |
+    [mysqld]
+    bind-address = 0.0.0.0
