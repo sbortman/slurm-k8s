@@ -128,18 +128,18 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:5.7
+          image: mariadb:10.11
           env:
-            - name: MYSQL_ROOT_PASSWORD
+            - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
                   key: root-password
-            - name: MYSQL_DATABASE
+            - name: MARIADB_DATABASE
               value: slurm_acct_db
-            - name: MYSQL_USER
+            - name: MARIADB_USER
               value: slurm
-            - name: MYSQL_PASSWORD
+            - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
