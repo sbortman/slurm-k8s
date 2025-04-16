@@ -20,23 +20,29 @@ fi
 echo "Starting munged..."
 /usr/sbin/munged --force --verbose
 
+# Wait for the munge socket to appear
+echo "Waiting for munge socket..."
+until [[ -S /var/run/munge/munge.socket.2 ]]; do
+  sleep 1
+done
+
 # Make sure log and spool dirs exist
 mkdir -p /var/log/slurm /var/run/slurm /var/spool/slurm /var/spool/slurmd /var/spool/slurm/state
 chown -R slurm:slurm /var/log/slurm /var/run/slurm /var/spool/slurm /var/spool/slurmd
 
-# Start correct slurm daemon
+# Start correct slurm daemon as slurm user
 case "$ROLE" in
   slurmdbd)
     echo "Starting slurmdbd..."
-    exec /usr/sbin/slurmdbd -Dvvv
+    exec su -s /bin/bash -c "/usr/sbin/slurmdbd -Dvvv" slurm
     ;;
   slurmctld)
     echo "Starting slurmctld..."
-    exec /usr/sbin/slurmctld -Dvvv
+    exec su -s /bin/bash -c "/usr/sbin/slurmctld -Dvvv" slurm
     ;;
   slurmd)
     echo "Starting slurmd..."
-    exec /usr/sbin/slurmd -Dvvv
+    exec su -s /bin/bash -c "/usr/sbin/slurmd -Dvvv" slurm
     ;;
   *)
     echo "Usage: $0 {slurmdbd|slurmctld|slurmd}"

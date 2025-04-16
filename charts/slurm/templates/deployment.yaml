@@ -94,6 +94,14 @@ spec:
       containers:
         - name: slurmdbd
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          env:
+            - name: MYSQL_USER
+              value: slurm
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: user-password
           command: ["/entrypoint.sh", "slurmdbd", "-f", "/config/slurmdbd.conf"]
           volumeMounts:
             - name: slurmdbd-config
@@ -148,9 +156,9 @@ spec:
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
-            - name: init-script
-              mountPath: /docker-entrypoint-initdb.d/init.sql
-              subPath: init.sql
+            # - name: init-script
+            #   mountPath: /docker-entrypoint-initdb.d/init.sql
+            #   subPath: init.sql
             - name: mysql-custom-config
               mountPath: /etc/mysql/conf.d
 

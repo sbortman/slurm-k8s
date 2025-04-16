@@ -9,6 +9,8 @@ data:
     ProctrackType=proctrack/linuxproc
 
     SlurmUser=slurm
+    SlurmdUser=slurm
+
     SlurmdSpoolDir=/var/spool/slurmd
     SlurmctldLogFile=/var/log/slurm/slurmctld.log
     SlurmdLogFile=/var/log/slurm/slurmd.log
